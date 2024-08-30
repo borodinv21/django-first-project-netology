@@ -28,3 +28,18 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+
+def all_recipes_view(request, recipe_name):
+    if recipe_name in DATA.keys():
+        context = {
+            'recipe': DATA[recipe_name].copy()
+        }
+
+        if request.GET.get('servings'):
+            servings = int(request.GET.get('servings'))
+
+            for ingridient, count in context['recipe'].items():
+                context['recipe'][ingridient] = DATA[recipe_name][ingridient] * servings
+
+        return render(request, 'index.html', context=context)
+
